@@ -1,0 +1,2 @@
+entry: {mimetypes}
+requires: [> 0.9.83]

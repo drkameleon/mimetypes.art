@@ -27,7 +27,7 @@
 This package provides an ample (2000+) entry database of MIME content typse and their corresponding extensions and allows to easily look up the suitable extensions by file extension (or file path). It also supports the reverse operation: look up possible mime types, based on a given extension.
 
 > [!TIP]
-> For the data, the package has been based on the very useful list compiled by the [mime-db project](https://github.com/jshttp/mime-db).
+> For the data, the package has been based on the very useful list compiled by the [mime-db](https://github.com/jshttp/mime-db) project.
 
 ### How do I use it?
 

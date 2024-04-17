@@ -21,7 +21,7 @@ _mimetypes: #./"mimedb.art"
 mimetype: function [location :string][
     ;; description: « get mimetype(s) from given extension/filepath
     ;; options: [
-    ;;      extension: « get possible file extensions for given mimetype instead
+    ;;      extensions: « get possible file extensions for given mimetype instead
     ;; ]
     ;; returns: :block
     ;; example: {

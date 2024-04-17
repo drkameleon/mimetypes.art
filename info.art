@@ -1,2 +1,2 @@
-entry: {mimetypes}
+entry: {src/mimetypes}
 requires: [> 0.9.83]

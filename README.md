@@ -45,7 +45,7 @@ mimetype.extensions "image/jpeg"
 ```
 
 > [!IMPORTANT]
-> In case, no suitable MIME type has been found for a given extension/path, or if the given MIME type isn't associated with any known extensions, then `mimetype` will return an empty block!
+> In case no suitable MIME type has been found for a given extension/path, or if the given MIME type isn't associated with any known extensions, then `mimetype` will return an empty block!
 
 ### Function reference
 

@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-     <i>Mimetype recognition package for  Arturo</i> 
+     <i>MIME content type registry & recognition package for Arturo</i> 
      <br><br>
      <img src="https://img.shields.io/github/license/arturo-lang/grafito?style=for-the-badge">
     <img src="https://img.shields.io/badge/language-Arturo-orange.svg?style=for-the-badge">

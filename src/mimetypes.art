@@ -8,48 +8,50 @@
 ; (c) 2024 Yanis Zafirópulos
 ;===============================================
 
-;---------------------------
-; Private variables
-;---------------------------
+export module [
+    ;---------------------------
+    ; Private variables
+    ;---------------------------
 
-_mimetypes: #./"mimedb.art"
+    mimetypes: #./"mimedb.art"
 
-;---------------------------
-; Public methods
-;---------------------------
+    ;---------------------------
+    ; Public methods
+    ;---------------------------
 
-mimetype: function [location :string][
-    ;; description: « get mimetype(s) from given extension/filepath
-    ;; options: [
-    ;;      extensions: « get possible file extensions for given mimetype instead
-    ;; ]
-    ;; returns: :block
-    ;; example: {
-    ;;      mimetype "jpg"              ; => ["image/jpeg"]
-    ;;      mimetype "somefile.jpg"     ; => ["image/jpeg"]
-    ;;      mimetype "boom"             ; => []
-    ;;      
-    ;;      mimetype.extensions "image/jpeg"
-    ;;      ; => ["jpe","jpeg","jpg"]
-    ;; }
-    extensions?: not? null? attr 'extensions
+    mimetype: method.public [location :string][
+        ;; description: « get mimetype(s) from given extension/filepath
+        ;; options: [
+        ;;      extensions: « get possible file extensions for given mimetype instead
+        ;; ]
+        ;; returns: :block
+        ;; example: {
+        ;;      mimetype "jpg"              ; => ["image/jpeg"]
+        ;;      mimetype "somefile.jpg"     ; => ["image/jpeg"]
+        ;;      mimetype "boom"             ; => []
+        ;;      
+        ;;      mimetype.extensions "image/jpeg"
+        ;;      ; => ["jpe","jpeg","jpg"]
+        ;; }
+        extensions?: not? null? attr 'extensions
 
-    extensions? ? [
-        ret: []
-        loop _mimetypes [k,v][
-            if contains? v location ->
-                'ret ++ k
+        extensions? ? [
+            ret: []
+            loop \mimetypes [k,v][
+                if contains? v location ->
+                    'ret ++ k
+            ]
+            return sort ret
+        ][
+            isPath: contains? location "."
+            
+            extension: isPath ? -> replace extract.extension location "." ""
+                                -> location
+
+            ret: []
+            try -> ret: \mimetypes\[extension]
+            return ret
         ]
-        return sort ret
-    ][
-        isPath: contains? location "."
-        
-        extension: isPath ? -> replace extract.extension location "." ""
-                            -> location
-
-        ret: []
-        try -> ret: _mimetypes\[extension]
-        return ret
     ]
 ]
 

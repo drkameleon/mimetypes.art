@@ -23,6 +23,7 @@ export module [
         ;; description: « get mimetype(s) from given extension/filepath
         ;; options: [
         ;;      extensions: « get possible file extensions for given mimetype instead
+        ;;      best: « get only best match for given path
         ;; ]
         ;; returns: :block
         ;; example: {
@@ -34,6 +35,7 @@ export module [
         ;;      ; => ["jpe","jpeg","jpg"]
         ;; }
         extensions?: not? null? attr 'extensions
+        best?: not? null? attr 'best
 
         extensions? ? [
             ret: []
@@ -54,7 +56,9 @@ export module [
             ret: []
             ; This is a hack (since `try` drops a null onto the stack)
             z: try [ ret: \mimetypes\[extension] ]
-            return ret
+            if and? [best?][positive? size ret] -> return last ret
+            
+            return ret           
         ]
     ]
 ]!

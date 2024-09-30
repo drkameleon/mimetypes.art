@@ -66,6 +66,7 @@ get mimetype(s) from given extension/filepath
 | Option | Type(s) | Description |
 |----|----|----|
 | extensions |  | get possible file extensions for given mimetype instead | 
+| best |  | get only best match for given path |
 
 ##### Returns
 

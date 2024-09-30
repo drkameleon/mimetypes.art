@@ -43,10 +43,13 @@ export module [
             ]
             return sort ret
         ][
-            isPath: contains? location "."
+            isPath: and? [contains? location "."]
+                         [not? prefix? location "."]
             
-            extension: isPath ? -> replace extract.extension location "." ""
+            extension: isPath ? -> extract.extension location
                                 -> location
+
+            extension: replace extension "." ""
 
             ret: []
             try -> ret: \mimetypes\[extension]

@@ -54,10 +54,11 @@ export module [
             extension: replace extension "." ""
 
             ret: []
+
             ; This is a hack (since `try` drops a null onto the stack)
             z: try [ ret: \mimetypes\[extension] ]
             if and? [best?][positive? size ret] -> return last ret
-            
+
             return ret           
         ]
     ]

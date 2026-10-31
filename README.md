@@ -7,6 +7,7 @@
      <br><br>
      <img src="https://img.shields.io/github/license/drkameleon/mimetypes.art?style=for-the-badge">
     <a href="https://github.com/arturo-lang/arturo" style="text-decoration: none; display: inline-block;"><img src="https://img.shields.io/badge/language-Arturo-6A156B.svg?style=for-the-badge" alt="Language"/></a>
+    <a href="https://github.com/drkameleon/mimetypes.art/actions/workflows/ci.yml" style="text-decoration: none; display: inline-block;"><img src="https://img.shields.io/github/actions/workflow/status/drkameleon/mimetypes.art/ci.yml?branch=main&style=for-the-badge" alt="Build Status"/></a>
 </p>
 
 --- 

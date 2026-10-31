@@ -23,15 +23,17 @@ export module [
         ;; description: « get mimetype(s) from given extension/filepath
         ;; options: [
         ;;      extensions: « get possible file extensions for given mimetype instead
-        ;;      best: « get only best match for given path
+        ;;      best: « get only the best match for given extension/filepath (or null, if none)
         ;; ]
-        ;; returns: :block
+        ;; returns: :block :string :null
         ;; example: {
         ;;      mimetype "jpg"              ; => ["image/jpeg"]
         ;;      mimetype "somefile.jpg"     ; => ["image/jpeg"]
         ;;      mimetype "boom"             ; => []
         ;;
         ;;      mimetype.best "photo.JPG"   ; => "image/jpeg"
+        ;;      mimetype.best "file.xml"    ; => "application/xml"
+        ;;      mimetype.best "boom"        ; => null
         ;;
         ;;      mimetype.extensions "image/jpeg"
         ;;      ; => ["jpe","jpeg","jpg"]
@@ -55,16 +57,17 @@ export module [
         filename: last split.by:"/" replace loc "\\" "/"
 
         ; a path whose filename has no extension: nothing to match
-        if and? [filename <> loc][not? contains? filename "."] ->
-            return []
-
-        extension: last split.by:"." filename
+        extension: ""
+        if or? [filename = loc][contains? filename "."] ->
+            extension: last split.by:"." filename
 
         ret: []
         if key? \mimetypes extension ->
             ret: \mimetypes\[extension]
 
-        if and? [best?][positive? size ret] -> return last ret
+        ; types are stored in order of preference,
+        ; so the best match is always the first one
+        if best? -> return (empty? ret) ? -> null -> first ret
 
         return ret
     ]

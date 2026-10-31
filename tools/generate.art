@@ -1,0 +1,164 @@
+;===============================================
+; Mimetypes.art
+;
+; Database generator:
+; fetches mime-db & regenerates:
+;   - src/mimedb.art (extension -> mime types)
+;   - src/extdb.art  (mime type -> extensions)
+;
+; usage: arturo tools/generate.art
+;
+; MIT License
+; (c) 2026 Yanis Zafirópulos
+;===============================================
+
+;---------------------------
+; Configuration
+;---------------------------
+
+; https://github.com/jshttp/mime-db
+mimedbVersion: "1.54.0"
+mimedbUrl: ~"https://cdn.jsdelivr.net/npm/mime-db@|mimedbVersion|/db.json"
+
+; common extensions that mime-db doesn't list first
+; for a given mime type
+extensionOverrides: #[
+    "audio/aac": "aac"
+    "audio/mpeg": "mp3"
+    "video/quicktime": "mov"
+]
+
+;---------------------------
+; Scoring
+;---------------------------
+
+; same scoring as the jshttp/mime-types package
+; (see: https://github.com/jshttp/mime-score)
+
+facetScores: #[
+    "prs.": 100
+    "x-": 200
+    "x.": 300
+    "vnd.": 400
+]
+
+sourceScores: #[
+    "nginx": 10
+    "apache": 20
+    "iana": 40
+]
+
+kindScores: #[
+    "application": 1    ; prefer application/xml over text/xml
+    "font": 2           ; prefer font/woff over application/font-woff
+    "audio": 2          ; prefer video/mp4 over audio/mp4 over application/mp4
+    "video": 3
+]
+
+; the higher the score, the more "official" the type
+mimeScore: function [mimetype :string, source :string][
+    if mimetype = "application/octet-stream" -> return 0
+
+    parts: split.by:"/" mimetype
+    kind: parts\0
+    subtype: parts\1
+
+    ; RFC facets (see: https://tools.ietf.org/html/rfc6838#section-3)
+    facet: replace subtype {/(\.|x-).*/} "$1"
+
+    facetScore: (key? facetScores facet) ? -> facetScores\[facet] -> 900
+    sourceScore: (key? sourceScores source) ? -> sourceScores\[source] -> 30
+    kindScore: (key? kindScores kind) ? -> kindScores\[kind] -> 0
+
+    ; all else being equal, prefer shorter types
+    lengthScore: 1 - (to :floating size mimetype) / 100
+
+    return facetScore + sourceScore + kindScore + lengthScore
+]
+
+;---------------------------
+; Helpers
+;---------------------------
+
+; render a dictionary of string blocks,
+; the way our database files are formatted
+renderDb: function [header :block, data :dictionary][
+    lines: map header 'line -> strip ~"; |line|"
+    'lines ++ ""
+    loop sort keys data 'k [
+        'lines ++ ~{"|k|": [}
+        loop data\[k] 'v ->
+            'lines ++ "    " ++ ~{"|v|"}
+        'lines ++ "]"
+    ]
+    (join.with:"\n" lines) ++ "\n"
+]
+
+;---------------------------
+; Main
+;---------------------------
+
+print ~"Fetching mime-db v|mimedbVersion|..."
+db: read.json mimedbUrl
+
+scores: #[]
+mimedb: #[]
+extdb: #[]
+
+loop db [mimetype, entry][
+    unless key? entry "extensions" -> continue
+
+    origin: (key? entry "source") ? -> entry\source -> "default"
+    scores\[mimetype]: mimeScore mimetype origin
+
+    exts: entry\extensions
+    if key? extensionOverrides mimetype [
+        preferred: extensionOverrides\[mimetype]
+        ensure.that: ~"|preferred| is a known extension for |mimetype|" ->
+            contains? exts preferred
+        exts: @[preferred] ++ select exts 'e -> e <> preferred
+    ]
+    extdb\[mimetype]: exts
+
+    loop exts 'ext [
+        unless key? mimedb ext -> mimedb\[ext]: []
+        mimedb\[ext]: mimedb\[ext] ++ @[mimetype]
+    ]
+]
+
+; best first - ties are resolved like mime-types does:
+; the alphabetically later one wins
+loop keys mimedb 'ext ->
+    mimedb\[ext]: arrange sort.descending mimedb\[ext] 'mt -> neg scores\[mt]
+
+credits: @[
+    "list compiled based on data from:"
+    ""
+    ~"https://github.com/jshttp/mime-db (v|mimedbVersion|)"
+    "MIT License"
+    "Copyright (c) 2014 Jonathan Ong <me@jongleberry.com>"
+    "Copyright (c) 2015-2022 Douglas Christopher Wilson <doug@somethingdoug.com>"
+    ""
+]
+
+mimedbHeader: credits ++ [
+    "for every extension, the mime types are ordered by"
+    "preference (most suitable first), using the same"
+    "scoring as the jshttp/mime-types package"
+    "(IANA > mime-db > Apache > nginx, etc)"
+]
+
+extdbHeader: credits ++ [
+    "for every mime type, the extensions are ordered by"
+    "preference (most suitable first), as listed in mime-db,"
+    "with the following exceptions:"
+    ""
+]
+
+loop sort keys extensionOverrides 'mt ->
+    'extdbHeader ++ ~"  |mt| -> |extensionOverrides\[mt]|"
+
+write renderDb mimedbHeader mimedb relative "../src/mimedb.art"
+write renderDb extdbHeader extdb relative "../src/extdb.art"
+
+print ~"Done: |size mimedb| extensions, |size extdb| mime types"

@@ -17,6 +17,7 @@
 * [What does this package do?](#what-does-this-package-do)
 * [How do I use it?](#how-do-i-use-it)
 * [Function Reference](#function-reference)
+* [Updating the database](#updating-the-database)
 * [License](#license)   
 
 <!--te-->
@@ -88,6 +89,14 @@ get mimetype(s) from given extension/filepath
 - *:null* (when `.best` is used and no match has been found)
 
 <hr/>
+
+### Updating the database
+
+Both `src/mimedb.art` and `src/extdb.art` are generated from [mime-db](https://github.com/jshttp/mime-db) - to update them, bump `mimedbVersion` in `tools/generate.art` and run:
+
+```bash
+arturo tools/generate.art
+```
 
 ### License
 

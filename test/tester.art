@@ -70,6 +70,36 @@ suite "Best match" [
         assert -> in? mimetype.best "3gpp" mimetype "3gpp"
         assert -> in? mimetype.best "xml" mimetype "xml"
     ]
+
+    test "picks the preferred type" [
+        assert -> "audio/wav" = mimetype.best "wav"
+        assert -> "application/xml" = mimetype.best "xml"
+        assert -> "application/rtf" = mimetype.best "rtf"
+        assert -> "video/mp4" = mimetype.best "mp4"
+        assert -> "audio/mpeg" = mimetype.best "mp3"
+        assert -> "text/javascript" = mimetype.best "js"
+        assert -> "font/woff" = mimetype.best "woff"
+        assert -> "application/x-msdos-program" = mimetype.best "exe"
+        assert -> "application/zip" = mimetype.best "zip"
+    ]
+
+    test "is the first of all matches" [
+        loop ["wav" "xml" "rtf" "mp4" "exe" "3gpp" "zip"] 'ext ->
+            assert -> (first mimetype ext) = mimetype.best ext
+    ]
+
+    test "works with paths" [
+        assert -> "application/xml" = mimetype.best "/home/user/feed.XML"
+        assert -> "audio/wav" = mimetype.best "..\\sounds\\beep.wav"
+    ]
+
+    test "no match" [
+        assert -> null? mimetype.best "boom"
+        assert -> null? mimetype.best "somefile.boom"
+        assert -> null? mimetype.best "dir.v2/README"
+        assert -> null? mimetype.best "dir/"
+        assert -> null? mimetype.best ""
+    ]
 ]
 
 suite "Lookup by mimetype" [

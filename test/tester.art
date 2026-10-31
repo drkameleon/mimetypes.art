@@ -1,6 +1,9 @@
 import {unitt}!
 import ./"../src/mimetypes.art"!
 
+mimedb: #./"../src/mimedb.art"
+extdb: #./"../src/extdb.art"
+
 suite "Lookup by extension" [
     test "plain extensions" [
         assert -> ["image/jpeg"] = mimetype "jpg"
@@ -104,17 +107,19 @@ suite "Best match" [
 
 suite "Lookup by mimetype" [
     test "known mimetypes" [
-        assert -> ["jpe" "jpeg" "jpg"] = mimetype.extensions "image/jpeg"
+        assert -> ["jpg" "jpeg" "jpe"] = mimetype.extensions "image/jpeg"
         assert -> ["png"] = mimetype.extensions "image/png"
     ]
 
     test "case-insensitive" [
-        assert -> ["jpe" "jpeg" "jpg"] = mimetype.extensions "IMAGE/JPEG"
+        assert -> ["jpg" "jpeg" "jpe"] = mimetype.extensions "IMAGE/JPEG"
     ]
 
-    test "results are sorted" [
-        exts: mimetype.extensions "text/plain"
-        assert -> exts = sort exts
+    test "results are in order of preference" [
+        assert -> ["html" "htm" "shtml"] = mimetype.extensions "text/html"
+        assert -> "txt" = first mimetype.extensions "text/plain"
+        assert -> "mp3" = first mimetype.extensions "audio/mpeg"
+        assert -> ["mov" "qt"] = mimetype.extensions "video/quicktime"
     ]
 
     test "unknown mimetypes" [
@@ -127,6 +132,60 @@ suite "Lookup by mimetype" [
             loop mimetype.extensions mt 'ext ->
                 assert -> in? mt mimetype ext
         ]
+    ]
+]
+
+suite "Best extension" [
+    test "picks the preferred extension" [
+        assert -> "jpg" = mimetype.extensions.best "image/jpeg"
+        assert -> "html" = mimetype.extensions.best "text/html"
+        assert -> "txt" = mimetype.extensions.best "text/plain"
+        assert -> "md" = mimetype.extensions.best "text/markdown"
+        assert -> "yaml" = mimetype.extensions.best "text/yaml"
+        assert -> "mp4" = mimetype.extensions.best "video/mp4"
+        assert -> "xml" = mimetype.extensions.best "application/xml"
+        assert -> "bin" = mimetype.extensions.best "application/octet-stream"
+    ]
+
+    test "overrides of mime-db's order" [
+        assert -> "aac" = mimetype.extensions.best "audio/aac"
+        assert -> "mp3" = mimetype.extensions.best "audio/mpeg"
+        assert -> "mov" = mimetype.extensions.best "video/quicktime"
+    ]
+
+    test "is the first of all extensions" [
+        loop ["image/jpeg" "text/plain" "audio/mpeg" "video/mpeg" "text/x-c"] 'mt ->
+            assert -> (first mimetype.extensions mt) = mimetype.extensions.best mt
+    ]
+
+    test "case-insensitive" [
+        assert -> "jpg" = mimetype.extensions.best "Image/JPEG"
+    ]
+
+    test "no match" [
+        assert -> null? mimetype.extensions.best "nope/nope"
+        assert -> null? mimetype.extensions.best "jpg"
+        assert -> null? mimetype.extensions.best ""
+    ]
+]
+
+suite "Database" [
+    test "both lookup tables contain the same entries" [
+        ; every extension -> mimetype pair, from both sides
+        fromMimedb: sort flatten map mimedb [ext,types] -> map types 't -> ~"|ext| |t|"
+        fromExtdb: sort flatten map extdb [t,exts] -> map exts 'ext -> ~"|ext| |t|"
+
+        assert -> fromMimedb = fromExtdb
+    ]
+
+    test "no duplicates" [
+        assert -> every? values mimedb 'v -> (size v) = size unique v
+        assert -> every? values extdb 'v -> (size v) = size unique v
+    ]
+
+    test "keys are lowercase" [
+        assert -> every? keys mimedb 'k -> k = lower k
+        assert -> every? keys extdb 'k -> k = lower k
     ]
 ]
 

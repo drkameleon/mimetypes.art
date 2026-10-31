@@ -14,6 +14,7 @@ export module [
     ;---------------------------
 
     mimetypes: #./"mimedb.art"
+    extensions: #./"extdb.art"
 
     ;---------------------------
     ; Public methods
@@ -23,7 +24,7 @@ export module [
         ;; description: « get mimetype(s) from given extension/filepath
         ;; options: [
         ;;      extensions: « get possible file extensions for given mimetype instead
-        ;;      best: « get only the best match for given extension/filepath (or null, if none)
+        ;;      best: « get only the best match (or null, if none)
         ;; ]
         ;; returns: :block :string :null
         ;; example: {
@@ -36,36 +37,36 @@ export module [
         ;;      mimetype.best "boom"        ; => null
         ;;
         ;;      mimetype.extensions "image/jpeg"
-        ;;      ; => ["jpe","jpeg","jpg"]
+        ;;      ; => ["jpg","jpeg","jpe"]
+        ;;
+        ;;      mimetype.extensions.best "audio/mpeg"
+        ;;      ; => "mp3"
         ;; }
         extensions?: not? null? attr 'extensions
         best?: not? null? attr 'best
 
         loc: lower location
 
-        if extensions? [
-            ret: []
-            loop \mimetypes [k,v][
-                if contains? v loc ->
-                    'ret ++ k
-            ]
-            return sort ret
+        ret: []
+
+        extensions? ? [
+            if key? \extensions loc ->
+                ret: \extensions\[loc]
+        ][
+            ; keep only the last path component (filename),
+            ; then whatever follows its last dot
+            filename: last split.by:"/" replace loc "\\" "/"
+
+            ; a path whose filename has no extension: nothing to match
+            extension: ""
+            if or? [filename = loc][contains? filename "."] ->
+                extension: last split.by:"." filename
+
+            if key? \mimetypes extension ->
+                ret: \mimetypes\[extension]
         ]
 
-        ; keep only the last path component (filename),
-        ; then whatever follows its last dot
-        filename: last split.by:"/" replace loc "\\" "/"
-
-        ; a path whose filename has no extension: nothing to match
-        extension: ""
-        if or? [filename = loc][contains? filename "."] ->
-            extension: last split.by:"." filename
-
-        ret: []
-        if key? \mimetypes extension ->
-            ret: \mimetypes\[extension]
-
-        ; types are stored in order of preference,
+        ; results are stored in order of preference,
         ; so the best match is always the first one
         if best? -> return (empty? ret) ? -> null -> first ret
 
@@ -83,4 +84,5 @@ if standalone? [
     inspect mimetype "boom"
 
     inspect mimetype.extensions "image/jpeg"
+    inspect mimetype.extensions.best "audio/mpeg"
 ]

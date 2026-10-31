@@ -1,6 +1,6 @@
 ; list compiled based on data from:
 ;
-; https://github.com/jshttp/mime-db
+; https://github.com/jshttp/mime-db (v1.54.0)
 ; MIT License
 ; Copyright (c) 2014 Jonathan Ong <me@jongleberry.com>
 ; Copyright (c) 2015-2022 Douglas Christopher Wilson <doug@somethingdoug.com>
@@ -10,6 +10,9 @@
 ]
 "1km": [
     "application/vnd.1000minds.decision-model+xml"
+]
+"210": [
+    "model/step"
 ]
 "3dml": [
     "text/vnd.in3d.3dml"
@@ -213,6 +216,9 @@
 "b16": [
     "image/vnd.pco.b16"
 ]
+"bary": [
+    "model/vnd.bary"
+]
 "bat": [
     "application/x-msdownload"
 ]
@@ -224,6 +230,9 @@
 ]
 "bdm": [
     "application/vnd.syncml.dm+wbxml"
+]
+"bdo": [
+    "application/vnd.nato.bindingdataobject+xml"
 ]
 "bdoc": [
     "application/bdoc"
@@ -240,6 +249,9 @@
 ]
 "blb": [
     "application/x-blorb"
+]
+"blend": [
+    "application/x-blender"
 ]
 "blorb": [
     "application/x-blorb"
@@ -265,6 +277,12 @@
 ]
 "bpk": [
     "application/octet-stream"
+]
+"brush": [
+    "application/vnd.procreate.brush"
+]
+"brushset": [
+    "application/vnd.procrate.brushset"
 ]
 "bsp": [
     "model/vnd.valve.source.compiled-map"
@@ -557,6 +575,12 @@
 "dbk": [
     "application/docbook+xml"
 ]
+"dcm": [
+    "application/dicom"
+]
+"dcmp": [
+    "application/vnd.dcmp+xml"
+]
 "dcr": [
     "application/x-director"
 ]
@@ -638,6 +662,9 @@
 "dna": [
     "application/vnd.dna"
 ]
+"dng": [
+    "image/x-adobe-dng"
+]
 "doc": [
     "application/msword"
 ]
@@ -670,6 +697,9 @@
 ]
 "drle": [
     "image/dicom-rle"
+]
+"drm": [
+    "application/vnd.procreate.dream"
 ]
 "dsc": [
     "text/prs.lines.tag"
@@ -836,6 +866,9 @@
 "fbs": [
     "image/vnd.fastbidsheet"
 ]
+"fbx": [
+    "application/vnd.autodesk.fbx"
+]
 "fcdt": [
     "application/vnd.adobe.formscentral.fcdt"
 ]
@@ -969,6 +1002,9 @@
 "gdoc": [
     "application/vnd.google-apps.document"
 ]
+"gdraw": [
+    "application/vnd.google-apps.drawing"
+]
 "ged": [
     "text/vnd.familysearch.gedcom"
 ]
@@ -981,8 +1017,14 @@
 "gex": [
     "application/vnd.geometry-explorer"
 ]
+"gform": [
+    "application/vnd.google-apps.form"
+]
 "ggb": [
     "application/vnd.geogebra.file"
+]
+"ggs": [
+    "application/vnd.geogebra.slides"
 ]
 "ggt": [
     "application/vnd.geogebra.tool"
@@ -996,11 +1038,17 @@
 "gim": [
     "application/vnd.groove-identity-message"
 ]
+"gjam": [
+    "application/vnd.google-apps.jam"
+]
 "glb": [
     "model/gltf-binary"
 ]
 "gltf": [
     "model/gltf+json"
+]
+"gmap": [
+    "application/vnd.google-apps.map"
 ]
 "gml": [
     "application/gml+xml"
@@ -1038,11 +1086,17 @@
 "grxml": [
     "application/srgs+xml"
 ]
+"gscript": [
+    "application/vnd.google-apps.script"
+]
 "gsf": [
     "application/x-font-ghostscript"
 ]
 "gsheet": [
     "application/vnd.google-apps.spreadsheet"
+]
+"gsite": [
+    "application/vnd.google-apps.site"
 ]
 "gslides": [
     "application/vnd.google-apps.presentation"
@@ -1133,9 +1187,6 @@
 ]
 "hqx": [
     "application/mac-binhex40"
-]
-"hsj2": [
-    "image/hsj2"
 ]
 "htc": [
     "text/x-component"
@@ -1237,6 +1288,9 @@
 "ipk": [
     "application/vnd.shana.informed.package"
 ]
+"ipynb": [
+    "application/x-ipynb+json"
+]
 "irm": [
     "application/vnd.ibm.rights-management"
 ]
@@ -1265,6 +1319,12 @@
 "jade": [
     "text/jade"
 ]
+"jaii": [
+    "image/jaii"
+]
+"jais": [
+    "image/jais"
+]
 "jam": [
     "application/vnd.jam"
 ]
@@ -1276,6 +1336,9 @@
 ]
 "java": [
     "text/x-java-source"
+]
+"jfif": [
+    "image/pjpeg"
 ]
 "jhc": [
     "image/jphc"
@@ -1354,6 +1417,9 @@
 ]
 "jt": [
     "model/jt"
+]
+"jxl": [
+    "image/jxl"
 ]
 "jxr": [
     "image/jxr"
@@ -1488,6 +1554,9 @@
 "lostxml": [
     "application/lost+xml"
 ]
+"lottie": [
+    "application/zip+dotlottie"
+]
 "lrf": [
     "application/octet-stream"
 ]
@@ -1527,6 +1596,12 @@
 "m2a": [
     "audio/mpeg"
 ]
+"m2t": [
+    "video/mp2t"
+]
+"m2ts": [
+    "video/mp2t"
+]
 "m2v": [
     "video/mpeg"
 ]
@@ -1542,6 +1617,9 @@
 "m4a": [
     "audio/mp4"
     "audio/x-m4a"
+]
+"m4b": [
+    "audio/mp4"
 ]
 "m4p": [
     "application/mp4"
@@ -1644,6 +1722,12 @@
 ]
 "mgz": [
     "application/vnd.proteus.magazine"
+]
+"mht": [
+    "message/rfc822"
+]
+"mhtml": [
+    "message/rfc822"
 ]
 "mid": [
     "audio/midi"
@@ -1844,6 +1928,7 @@
 ]
 "mts": [
     "model/vnd.mts"
+    "video/mp2t"
 ]
 "mus": [
     "application/vnd.musician"
@@ -2018,6 +2103,12 @@
 "omdoc": [
     "application/omdoc+xml"
 ]
+"one": [
+    "application/onenote"
+]
+"onea": [
+    "application/onenote"
+]
 "onepkg": [
     "application/onenote"
 ]
@@ -2102,6 +2193,9 @@
 ]
 "p12": [
     "application/x-pkcs12"
+]
+"p21": [
+    "model/step"
 ]
 "p7b": [
     "application/x-pkcs7-certificates"
@@ -2390,6 +2484,7 @@
 ]
 "rar": [
     "application/vnd.rar"
+    "application/x-compressed"
     "application/x-rar-compressed"
 ]
 "ras": [
@@ -2778,6 +2873,9 @@
 "std": [
     "application/vnd.sun.xml.draw.template"
 ]
+"step": [
+    "model/step"
+]
 "stf": [
     "application/vnd.wt.stf"
 ]
@@ -2790,6 +2888,12 @@
 "stl": [
     "application/vnd.ms-pki.stl"
     "model/stl"
+]
+"stp": [
+    "model/step"
+]
+"stpnc": [
+    "model/step"
 ]
 "stpx": [
     "model/step+xml"
@@ -3191,6 +3295,9 @@
 "vds": [
     "model/vnd.sap.vds"
 ]
+"vdx": [
+    "application/vnd.ms-visio.viewer"
+]
 "vhd": [
     "application/x-virtualbox-vhd"
 ]
@@ -3218,6 +3325,9 @@
 "vsd": [
     "application/vnd.visio"
 ]
+"vsdx": [
+    "application/vnd.visio"
+]
 "vsf": [
     "application/vnd.vsf"
 ]
@@ -3238,6 +3348,9 @@
 ]
 "vtu": [
     "model/vnd.vtu"
+]
+"vtx": [
+    "application/vnd.visio"
 ]
 "vxml": [
     "application/voicexml+xml"
@@ -3443,6 +3556,9 @@
 "xcs": [
     "application/calendar+xml"
 ]
+"xdcf": [
+    "application/vnd.gov.sk.xmldatacontainer+xml"
+]
 "xdf": [
     "application/xcap-diff+xml"
 ]
@@ -3646,6 +3762,7 @@
     "application/vnd.zzazz.deck+xml"
 ]
 "zip": [
+    "application/x-zip-compressed"
     "application/zip"
 ]
 "zir": [

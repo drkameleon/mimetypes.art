@@ -41,13 +41,18 @@ mimetype "somefile.jpg"     ; => ["image/jpeg"]
 mimetype "boom"             ; => []
 
 mimetype.best "photo.JPG"   ; => "image/jpeg"
+mimetype.best "file.xml"    ; => "application/xml"
+mimetype.best "boom"        ; => null
 
 mimetype.extensions "image/jpeg"
 ; => ["jpe","jpeg","jpg"]
 ```
 
 > [!IMPORTANT]
-> In case no suitable MIME type has been found for a given extension/path, or if the given MIME type isn't associated with any known extensions, then `mimetype` will return an empty block!
+> In case no suitable MIME type has been found for a given extension/path, or if the given MIME type isn't associated with any known extensions, then `mimetype` will return an empty block - or `null`, if `.best` is used!
+
+> [!NOTE]
+> For every extension, the possible MIME types are ordered by preference (most suitable first), using the same scoring as the [mime-types](https://github.com/jshttp/mime-types) package - which is what `.best` picks.
 
 ### Function reference
 
@@ -68,11 +73,13 @@ get mimetype(s) from given extension/filepath
 | Option | Type(s) | Description |
 |----|----|----|
 | extensions |  | get possible file extensions for given mimetype instead | 
-| best |  | get only best match for given path |
+| best |  | get only the best match for given extension/filepath (or null, if none) |
 
 ##### Returns
 
-- *:block* (or *:string* when `.best` is used and a match has been found)
+- *:block*
+- *:string* (when `.best` is used and a match has been found)
+- *:null* (when `.best` is used and no match has been found)
 
 <hr/>
 

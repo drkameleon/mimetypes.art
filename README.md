@@ -5,7 +5,7 @@
 <p align="center">
      <i>MIME content type registry & recognition package for Arturo</i> 
      <br><br>
-     <img src="https://img.shields.io/github/license/arturo-lang/grafito?style=for-the-badge">
+     <img src="https://img.shields.io/github/license/drkameleon/mimetypes.art?style=for-the-badge">
     <a href="https://github.com/arturo-lang/arturo" style="text-decoration: none; display: inline-block;"><img src="https://img.shields.io/badge/language-Arturo-6A156B.svg?style=for-the-badge" alt="Language"/></a>
 </p>
 
@@ -24,7 +24,7 @@
 
 ### What does this package do?
 
-This package provides an ample (2000+) entry database of MIME content typse and their corresponding extensions and allows to easily look up the suitable extensions by file extension (or file path). It also supports the reverse operation: look up possible mime types, based on a given extension.
+This package provides an ample (2000+) entry database of MIME content types and their corresponding extensions and allows to easily look up the suitable MIME types by file extension (or file path). It also supports the reverse operation: look up possible extensions, based on a given MIME type.
 
 > [!TIP]
 > For the data, the package has been based on the very useful list compiled by the [mime-db](https://github.com/jshttp/mime-db) project.
@@ -39,6 +39,8 @@ import "mimetypes"!
 mimetype "jpg"              ; => ["image/jpeg"]
 mimetype "somefile.jpg"     ; => ["image/jpeg"]
 mimetype "boom"             ; => []
+
+mimetype.best "photo.JPG"   ; => "image/jpeg"
 
 mimetype.extensions "image/jpeg"
 ; => ["jpe","jpeg","jpg"]
@@ -70,7 +72,7 @@ get mimetype(s) from given extension/filepath
 
 ##### Returns
 
-- *:block*
+- *:block* (or *:string* when `.best` is used and a match has been found)
 
 <hr/>
 

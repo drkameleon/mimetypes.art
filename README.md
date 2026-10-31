@@ -46,14 +46,19 @@ mimetype.best "file.xml"    ; => "application/xml"
 mimetype.best "boom"        ; => null
 
 mimetype.extensions "image/jpeg"
-; => ["jpe","jpeg","jpg"]
+; => ["jpg","jpeg","jpe"]
+
+mimetype.extensions.best "audio/mpeg"
+; => "mp3"
 ```
 
 > [!IMPORTANT]
 > In case no suitable MIME type has been found for a given extension/path, or if the given MIME type isn't associated with any known extensions, then `mimetype` will return an empty block - or `null`, if `.best` is used!
 
 > [!NOTE]
-> For every extension, the possible MIME types are ordered by preference (most suitable first), using the same scoring as the [mime-types](https://github.com/jshttp/mime-types) package - which is what `.best` picks.
+> Results are always ordered by preference (most suitable first) - and that's what `.best` picks:
+> - for MIME types (by extension), using the same scoring as the [mime-types](https://github.com/jshttp/mime-types) package
+> - for extensions (by MIME type), using mime-db's own order - except for `audio/aac` → `aac`, `audio/mpeg` → `mp3` and `video/quicktime` → `mov`
 
 ### Function reference
 
@@ -74,7 +79,7 @@ get mimetype(s) from given extension/filepath
 | Option | Type(s) | Description |
 |----|----|----|
 | extensions |  | get possible file extensions for given mimetype instead | 
-| best |  | get only the best match for given extension/filepath (or null, if none) |
+| best |  | get only the best match (or null, if none) |
 
 ##### Returns
 

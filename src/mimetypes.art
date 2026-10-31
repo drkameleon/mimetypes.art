@@ -30,37 +30,43 @@ export module [
         ;;      mimetype "jpg"              ; => ["image/jpeg"]
         ;;      mimetype "somefile.jpg"     ; => ["image/jpeg"]
         ;;      mimetype "boom"             ; => []
-        ;;      
+        ;;
+        ;;      mimetype.best "photo.JPG"   ; => "image/jpeg"
+        ;;
         ;;      mimetype.extensions "image/jpeg"
         ;;      ; => ["jpe","jpeg","jpg"]
         ;; }
         extensions?: not? null? attr 'extensions
         best?: not? null? attr 'best
 
-        extensions? ? [
+        loc: lower location
+
+        if extensions? [
             ret: []
             loop \mimetypes [k,v][
-                if contains? v location ->
+                if contains? v loc ->
                     'ret ++ k
             ]
             return sort ret
-        ][
-            isPath: and? [contains? location "."]
-                         [not? prefix? location "."]
-            
-            extension: isPath ? -> extract.extension location
-                                -> location
-
-            extension: replace extension "." ""
-
-            ret: []
-
-            ; This is a hack (since `try` drops a null onto the stack)
-            z: try [ ret: \mimetypes\[extension] ]
-            if and? [best?][positive? size ret] -> return last ret
-
-            return ret           
         ]
+
+        ; keep only the last path component (filename),
+        ; then whatever follows its last dot
+        filename: last split.by:"/" replace loc "\\" "/"
+
+        ; a path whose filename has no extension: nothing to match
+        if and? [filename <> loc][not? contains? filename "."] ->
+            return []
+
+        extension: last split.by:"." filename
+
+        ret: []
+        if key? \mimetypes extension ->
+            ret: \mimetypes\[extension]
+
+        if and? [best?][positive? size ret] -> return last ret
+
+        return ret
     ]
 ]!
 

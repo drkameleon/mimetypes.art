@@ -1,0 +1,103 @@
+import {unitt}!
+import ./"../src/mimetypes.art"!
+
+suite "Lookup by extension" [
+    test "plain extensions" [
+        assert -> ["image/jpeg"] = mimetype "jpg"
+        assert -> ["image/png"] = mimetype "png"
+        assert -> ["application/pdf"] = mimetype "pdf"
+        assert -> ["application/gzip"] = mimetype "gz"
+    ]
+
+    test "dot-prefixed extensions" [
+        assert -> ["image/jpeg"] = mimetype ".jpg"
+        assert -> ["image/png"] = mimetype ".png"
+    ]
+
+    test "case-insensitive" [
+        assert -> ["image/jpeg"] = mimetype "JPG"
+        assert -> ["image/jpeg"] = mimetype "Jpg"
+        assert -> ["image/png"] = mimetype ".PNG"
+    ]
+
+    test "multiple matches" [
+        assert -> ["audio/3gpp" "video/3gpp"] = sort mimetype "3gpp"
+        assert -> ["application/xml" "text/xml"] = sort mimetype "xml"
+    ]
+
+    test "unknown extensions" [
+        assert -> [] = mimetype "boom"
+        assert -> [] = mimetype ".boom"
+        assert -> [] = mimetype ""
+    ]
+]
+
+suite "Lookup by path" [
+    test "filenames" [
+        assert -> ["image/jpeg"] = mimetype "somefile.jpg"
+        assert -> ["image/jpeg"] = mimetype "photo.JPG"
+        assert -> ["application/gzip"] = mimetype "archive.tar.gz"
+    ]
+
+    test "absolute & relative paths" [
+        assert -> ["image/png"] = mimetype "/home/user/file.png"
+        assert -> ["image/jpeg"] = mimetype "./a.jpg"
+        assert -> ["image/jpeg"] = mimetype "../pics/a.jpg"
+        assert -> ["image/jpeg"] = mimetype "pics/2024.summer/a.jpg"
+    ]
+
+    test "Windows paths" [
+        assert -> ["image/png"] = mimetype "C:\\pics\\a.PNG"
+        assert -> ["image/jpeg"] = mimetype "..\\pics\\a.jpg"
+    ]
+
+    test "paths without extension" [
+        assert -> [] = mimetype "dir.v2/README"
+        assert -> [] = mimetype "src/zip"
+        assert -> [] = mimetype "dir/"
+        assert -> [] = mimetype "somefile.boom"
+    ]
+]
+
+suite "Best match" [
+    test "single match" [
+        assert -> "image/jpeg" = mimetype.best "jpg"
+        assert -> "image/jpeg" = mimetype.best "photo.JPG"
+        assert -> "image/png" = mimetype.best "/home/user/file.png"
+    ]
+
+    test "multiple matches" [
+        assert -> in? mimetype.best "3gpp" mimetype "3gpp"
+        assert -> in? mimetype.best "xml" mimetype "xml"
+    ]
+]
+
+suite "Lookup by mimetype" [
+    test "known mimetypes" [
+        assert -> ["jpe" "jpeg" "jpg"] = mimetype.extensions "image/jpeg"
+        assert -> ["png"] = mimetype.extensions "image/png"
+    ]
+
+    test "case-insensitive" [
+        assert -> ["jpe" "jpeg" "jpg"] = mimetype.extensions "IMAGE/JPEG"
+    ]
+
+    test "results are sorted" [
+        exts: mimetype.extensions "text/plain"
+        assert -> exts = sort exts
+    ]
+
+    test "unknown mimetypes" [
+        assert -> [] = mimetype.extensions "nope/nope"
+        assert -> [] = mimetype.extensions "jpg"
+    ]
+
+    test "round-trip" [
+        loop ["image/jpeg" "image/png" "application/zip" "text/html"] 'mt [
+            loop mimetype.extensions mt 'ext ->
+                assert -> in? mt mimetype ext
+        ]
+    ]
+]
+
+unitt\report 'full
